@@ -2,6 +2,7 @@
 FROM ubuntu:latest
 
 ARG RELEASE_TAG
+ARG OAUTH_PROXY_RELEASE_TAG
 ARG USERNAME=openvscode-server
 ARG USER_UID=12321
 ARG USER_GID=$USER_UID
@@ -20,6 +21,9 @@ RUN truncate -s0 /tmp/preseed.cfg;                                           \
     apt-get update && apt-get install -y     \
     tar                                      \
     bash                                     \
+    lsof                                     \
+    strace                                   \
+    net-tools                                \
     gzip                                     \
     git                                      \
     wget                                     \
@@ -78,7 +82,9 @@ ENV OPENVSCODE_SERVER_ROOT=/home/${RELEASE_TAG}-linux-x64
 ENV WHERE=${OPENVSCODE_SERVER_ROOT}
 
 # Copy nginx config to support https and authentication
-COPY nginx.vscode.conf /etc/nginx/conf.d/nginx.vscode.conf
+COPY nginx.vscode.conf /etc/nginx/nginx.conf
+RUN wget https://github.com/pusher/oauth2_proxy/releases/download/${OAUTH_PROXY_RELEASE_TAG}/oauth2_proxy-${OAUTH_PROXY_RELEASE_TAG}.linux-amd64.go1.13.6.tar.gz -O - 2>/dev/null|(mkdir -p /opt/oauth2_proxy && cd /opt/oauth2_proxy && tar xzvf - && ln -s /opt/oauth2_proxy/* /opt/oauth2_proxy/oauth2_proxy)
+
 
 # Copy wrapper and run that exec-style as entrypoint
 COPY entrypoint.sh ${WHERE}/entrypoint.sh
