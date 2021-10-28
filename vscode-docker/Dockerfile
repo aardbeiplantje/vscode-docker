@@ -45,6 +45,11 @@ RUN truncate -s0 /tmp/preseed.cfg;                                           \
     cargo                                    \
     libstdc++-9-dev:amd64                    \
     libgcc-9-dev:amd64                       \
+    libnginx-mod-http-lua                    \
+    lua-nginx-cookie                         \
+    lua-nginx-dns                            \
+    lua-nginx-string                         \
+    lua-nginx-websocket                      \
     screen;                                  \
     rm -rf /var/lib/apt/lists/*
 
