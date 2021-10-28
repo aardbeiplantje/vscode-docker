@@ -23,9 +23,10 @@ nginx -c /etc/nginx/nginx.conf &
     export OAUTH2_PROXY_COOKIE_SECRET=$(openssl rand -base64 32 | tr -- '+/' '-_')
     export OAUTH2_PROXY_CLIENT_ID=$OAUTH2_PROXY_CLIENT_ID
     export OAUTH2_PROXY_CLIENT_SECRET=$OAUTH2_PROXY_CLIENT_SECRET
-    export OAUTH2_PROXY_EMAIL_DOMAINS
+    export OAUTH2_PROXY_EMAIL_DOMAINS=${OAUTH2_PROXY_EMAIL_DOMAINS:-*}
     export OAUTH2_PROXY_GITHUB_ORG
-    export OAUTH2_PROXY_PROVIDER=github
+    export OAUTH2_PROXY_PROVIDER=${OAUTH2_PROXY_PROVIDER:-github}
+    export OAUTH2_PROXY_OIDC_ISSUER_URL
     export OAUTH2_PROXY_REDIRECT_URL=http://localhost:3000/oauth2/callback
     exec /opt/oauth2_proxy/oauth2_proxy/oauth2_proxy
 ) &
