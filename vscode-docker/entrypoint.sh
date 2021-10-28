@@ -4,7 +4,6 @@ set -x
 
 VSCODE_HOME=${VSCODE_HOME:-/home/workspace}
 USERNAME=${USERNAME:-openvscode-server}
-WHERE=${WHERE:-/home/$USERNAME}
 USER_UID=${USER_UID:-$(id -u)}
 USER_GID=${USER_GID:-$(id -g)}
 userdel openvscode-server
@@ -35,8 +34,10 @@ export LANG=C.UTF-8
 export LC_ALL=C.UTF-8
 export HOME='$VSCODE_HOME'
 export USER='$USERNAME'
+export OPENVSCODE_SERVER_ROOT='$OPENVSCODE_SERVER_ROOT'
 export EDITOR=code
 export VISUAL=code
 export SHELL=/bin/bash
 export GIT_EDITOR="code --wait"
-eval "$(ssh-agent -s)"; exec '$SHELL' '$WHERE'/server.sh --no-proxy-server --port 3030 '"$*"
+eval "$(ssh-agent -s)"
+exec $SHELL $OPENVSCODE_SERVER_ROOT/server.sh --no-proxy-server --port 3030 '"$*"

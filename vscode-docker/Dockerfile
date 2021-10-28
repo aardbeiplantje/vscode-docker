@@ -79,7 +79,6 @@ ENV EDITOR=code
 ENV VISUAL=code
 ENV GIT_EDITOR="code --wait"
 ENV OPENVSCODE_SERVER_ROOT=/home/${RELEASE_TAG}-linux-x64
-ENV WHERE=${OPENVSCODE_SERVER_ROOT}
 
 # Copy nginx config to support https and authentication
 COPY nginx.vscode.conf /etc/nginx/nginx.conf
@@ -87,5 +86,5 @@ RUN wget https://github.com/pusher/oauth2_proxy/releases/download/${OAUTH_PROXY_
 
 
 # Copy wrapper and run that exec-style as entrypoint
-COPY entrypoint.sh ${WHERE}/entrypoint.sh
-ENTRYPOINT ["/bin/bash", "-c", "exec ${WHERE}/entrypoint.sh \"${@}\"", "--"]
+COPY entrypoint.sh ${OPENVSCODE_SERVER_ROOT}/entrypoint.sh
+ENTRYPOINT ["/bin/bash", "-c", "exec ${OPENVSCODE_SERVER_ROOT}/entrypoint.sh \"${@}\"", "--"]
