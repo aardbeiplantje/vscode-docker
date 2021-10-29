@@ -85,10 +85,16 @@ ENV VISUAL=code
 ENV GIT_EDITOR="code --wait"
 ENV OPENVSCODE_SERVER_ROOT=/home/${RELEASE_TAG}-linux-x64
 
+WORKDIR /
+
 # Copy nginx config to support https and authentication
-COPY nginx.vscode.conf /etc/nginx/nginx.conf
 RUN wget https://github.com/pusher/oauth2_proxy/releases/download/${OAUTH_PROXY_RELEASE_TAG}/oauth2_proxy-${OAUTH_PROXY_RELEASE_TAG}.linux-amd64.go1.13.6.tar.gz -O - 2>/dev/null|(mkdir -p /opt/oauth2_proxy && cd /opt/oauth2_proxy && tar xzvf - && ln -s /opt/oauth2_proxy/* /opt/oauth2_proxy/oauth2_proxy)
 
+# Condig/Website
+COPY website/ /website/
+COPY nginx.vscode.conf /etc/nginx/nginx.conf
+RUN mv /website/imgs/favicon.ico /website/
+RUN ls -la /website/*
 
 # Copy wrapper and run that exec-style as entrypoint
 COPY entrypoint.sh ${OPENVSCODE_SERVER_ROOT}/entrypoint.sh
