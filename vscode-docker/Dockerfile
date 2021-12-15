@@ -13,6 +13,8 @@ USER root
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NONINTERACTIVE_SEEN true
 
+RUN cat /etc/resolv.conf; echo "nameserver 8.8.8.8" > /etc/resolv.conf
+
 RUN truncate -s0 /tmp/preseed.cfg;                                           \
     echo "tzdata tzdata/Areas select Europe"          >> /tmp/preseed.cfg;   \
     echo "tzdata tzdata/Zones/Europe select Brussels" >> /tmp/preseed.cfg;   \

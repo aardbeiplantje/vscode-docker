@@ -39,5 +39,7 @@ export EDITOR=code
 export VISUAL=code
 export SHELL=/bin/bash
 export GIT_EDITOR="code --wait"
-eval "$(ssh-agent -s)"
+if [ -z "$SSH_AUTH_SOCK" ]; then
+    eval "$(ssh-agent -s)"
+fi 
 exec $SHELL $OPENVSCODE_SERVER_ROOT/server.sh --no-proxy-server --port 3030 '"$*"
