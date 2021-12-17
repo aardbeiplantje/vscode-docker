@@ -27,14 +27,18 @@ docker build \
     --build-arg OAUTH_PROXY_RELEASE_TAG=v5.0.0 \
     --build-arg RELEASE_TAG=openvscode-server-v1.61.0 \
     vscode-docker/
+DOCKER_RUN_NAME=${DOCKER_RUN_NAME:-vscode_${USER}}
+docker stop "$DOCKER_RUN_NAME"
+docker rm "$DOCKER_RUN_NAME"
 docker image prune -f
-docker run -it --rm --init \
-    --net=host \
+docker run -it --init \
+    -d \
     -p 127.0.0.1:3000:3000 \
     -e USER_UID=$(id -u $USER) \
     -e USER_GID=$(id -g $USER) \
     -e USERNAME=$USER \
     -e GROUP=users \
+    --name "$DOCKER_RUN_NAME" \
     $do_auth \
     -e VSCODE_HOME=$VSCODE_HOME \
     -e OAUTH2_PROXY_CLIENT_ID=$OAUTH2_PROXY_CLIENT_ID \
